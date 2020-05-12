@@ -1,0 +1,29 @@
+{
+  "name": "apipets",
+  "version": "1.0.0",
+  "description": "web server of pets insurance application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ingjaguardo98/apipets.git"
+  },
+  "author": "Gerardo Diaz Zuniga",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^1.12.1"
+  },
+  "dependencies": {
+    "express": "^4.16.2",
+    "mongoose": "^5.9.13",
+    "nodemailer": "^6.4.6",
+    "request-json": "^0.6.4"
+  },
+  "bugs": {
+    "url": "https://github.com/ingjaguardo98/apipets/issues"
+  },
+  "homepage": "https://github.com/ingjaguardo98/apipets#readme"
+}
