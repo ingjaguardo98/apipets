@@ -25,7 +25,7 @@ var requestjson = require('request-json');
 
 var urlPets = "https://api.mlab.com/api/1/databases/gdiaz/collections/pets?apiKey=GOLqWa850qO8tsdCUdby6eq9eKPInBkt";
 var urlClients = "https://api.mlab.com/api/1/databases/gdiaz/collections/Clientes?apiKey=GOLqWa850qO8tsdCUdby6eq9eKPInBkt";
-
+var urlInsurancePois = "https://api.mlab.com/api/1/databases/gdiaz/collections/insurance-pois?apiKey=GOLqWa850qO8tsdCUdby6eq9eKPInBkt";
 app.listen(port);
 
 console.log('todo list RESTful API server started on: ' + port);
@@ -120,6 +120,27 @@ app.post('/Quotes', function(req, res) {
             }
         } else {
             res.status(404).send('Error desconocido');
+        }
+    })
+  });
+
+  // GET INSURANCE-POIS
+app.get('/insurance-pois', function(req, res) {
+    var q = req.query.q;
+    var indexCategory = q.indexOf("category");
+    var category = q.slice(indexCategory + 10);
+    category = category.replace(/'/g, '"');
+    var urlPoisAndQuery = urlInsurancePois + '&q={"category":' + category + '}';
+    console.log(urlPoisAndQuery);
+    var poisMLab = requestjson.createClient(urlPoisAndQuery);
+    poisMLab.get('', function(err, resM, body) {
+        if (err) {
+            res.status(404).send('Error al obtener pois');
+        } else {
+            var data = {
+                "data": body
+            };
+            res.status(200).send(data);
         }
     })
   });
