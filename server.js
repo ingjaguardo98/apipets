@@ -127,9 +127,32 @@ app.post('/Quotes', function(req, res) {
   // GET INSURANCE-POIS
 app.get('/insurance-pois', function(req, res) {
     var q = req.query.q;
+
     var indexCategory = q.indexOf("category");
     var category = q.slice(indexCategory + 10);
     category = category.replace(/'/g, '"');
+
+    var indexLongitude = q.indexOf("longitude");
+    var preLongitude = q.slice(indexLongitude + 11);
+    var indexNextAndLongitude = preLongitude.indexOf("AND");
+    var longitude = preLongitude.slice(0, indexNextAndLongitude);
+    longitude = longitude.replace(/'/g, '');
+    longitude = parseFloat(longitude);
+
+    var indexLatitude = q.indexOf("latitude");
+    var preLatitude = q.slice(indexLatitude + 10);
+    var indexNextAndLatitude = preLatitude.indexOf("AND");
+    var latitude = preLatitude.slice(0, indexNextAndLatitude);
+    latitude = latitude.replace(/'/g, '');
+    latitude = parseFloat(latitude);
+
+    var indexRadius = q.indexOf("radius");
+    var preRadius= q.slice(indexRadius + 8);
+    var indexNextAndRadius = preRadius.indexOf("AND");
+    var radius = preRadius.slice(0, indexNextAndRadius);
+    radius = radius.replace(/'/g, '');
+    radius = parseFloat(radius);
+
     var urlPoisAndQuery = urlInsurancePois + '&q={"category":' + category + '}';
     console.log(urlPoisAndQuery);
     var poisMLab = requestjson.createClient(urlPoisAndQuery);
@@ -137,10 +160,25 @@ app.get('/insurance-pois', function(req, res) {
         if (err) {
             res.status(404).send('Error al obtener pois');
         } else {
+            let bodyFilter = body.filter(el => getKilometros(latitude,longitude, el.address.geolocation.latitude, el.address.geolocation.longitude) <= radius);
+
             var data = {
-                "data": body
+                "data": bodyFilter
             };
             res.status(200).send(data);
         }
     })
   });
+
+function getKilometros(lat1,lon1,lat2,lon2) {
+    function rad(x) {
+        return x*Math.PI/180;
+    }
+    var R = 6378.137; //Radio de la tierra en km
+    var dLat = rad( lat2 - lat1 );
+    var dLong = rad( lon2 - lon1 );
+    var a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(rad(lat1)) * Math.cos(rad(lat2)) * Math.sin(dLong/2) * Math.sin(dLong/2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    var d = R * c;
+    return d.toFixed(3); //Retorna tres decimales
+}
