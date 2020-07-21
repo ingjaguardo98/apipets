@@ -124,7 +124,7 @@ app.post('/Quotes', function(req, res) {
     })
   });
 
-  // GET INSURANCE-POIS
+  // GET INSURANCE-POIS POR COORDENADAS
 app.get('/insurance-pois', function(req, res) {
     var q = req.query.q;
 
@@ -182,3 +182,21 @@ function getKilometros(lat1,lon1,lat2,lon2) {
     var d = R * c;
     return d.toFixed(3); //Retorna tres decimales
 }
+
+  // GET INSURANCE-POIS POR ID
+  app.get('/insurance-pois/:id', function(req, res) {
+
+    var urlPoisAndQueryId = urlInsurancePois + '&q={"id":' + req.params.id + '}';
+    var poisIdMLab = requestjson.createClient(urlPoisAndQueryId);
+
+    poisIdMLab.get('', function(err, resM, body) {
+        if (err) {
+            res.status(404).send('Error al obtener pois por id');
+        } else {
+            var data = {
+                "data": body
+            };
+            res.status(200).send(data);
+        }
+    })
+  });
