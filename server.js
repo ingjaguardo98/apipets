@@ -153,7 +153,7 @@ app.get('/insurance-pois', function(req, res) {
     radius = radius.replace(/'/g, '');
     radius = parseFloat(radius);
 
-    var urlPoisAndQuery = urlInsurancePois + '&q={"category":' + category + '}';
+    var urlPoisAndQuery = urlInsurancePois + '&l=6000&q={"category":' + category + '}';
     console.log(urlPoisAndQuery);
     var poisMLab = requestjson.createClient(urlPoisAndQuery);
     poisMLab.get('', function(err, resM, body) {
