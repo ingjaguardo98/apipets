@@ -14,8 +14,7 @@
   "author": "Gerardo Diaz Zuniga",
   "license": "ISC",
   "devDependencies": {
-    "nodemon": "^1.12.1",
-    "dot-prop": ">=4.2.1"
+    "nodemon": "^1.12.1"
   },
   "dependencies": {
     "express": "^4.16.2",
